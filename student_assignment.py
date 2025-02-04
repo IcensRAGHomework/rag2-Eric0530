@@ -1,7 +1,7 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import (CharacterTextSplitter,
                                       RecursiveCharacterTextSplitter)
-
+from langchain_core.documents import Document
 
 q1_pdf = "OpenSourceLicenses.pdf"
 q2_pdf = "勞動基準法.pdf"
@@ -19,11 +19,13 @@ def hw02_1(q1_pdf):
     for i , doc in enumerate(documents):
         split_chunks = text_splitter.split_text(doc.page_content)
         for chunk in split_chunks:
-            chunks.append({
-                "file_name": q1_pdf,   # 檔名
-                "page_number": i + 1,  # 頁碼（從 1 開始）
-                "content": chunk       # 內容
-            })
+            chunks.append(Document(
+                page_content=chunk,  # 內容
+                metadata={
+                    "file_name": q1_pdf,   # 檔名
+                    "page_number": i + 1   # 頁碼（從 1 開始）
+                }
+            ))
     
     # 回傳最後一個 chunk 物件
     return chunks[-1] if chunks else None

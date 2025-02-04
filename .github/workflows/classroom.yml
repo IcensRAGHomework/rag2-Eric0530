@@ -59,7 +59,7 @@ jobs:
           source .venv/bin/activate
           cp temp-tests/test_assignment.py .
           cp temp-tests/*.pdf .
-
+          cat test_assignment.py
       - name: Debug Python Environment
         run: |
           echo "Python Version:"
