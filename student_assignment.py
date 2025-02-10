@@ -35,15 +35,26 @@ def hw02_2(q2_pdf):
     loader = PyPDFLoader(q2_pdf)
     documents = loader.load()
 
+    # 先把所有頁面的文字合併成一個大段落
+    full_text = "\n".join([doc.page_content for doc in documents])
+
     # 初始化 RecursiveCharacterTextSplitter，根據章節與條文進行分割
     text_splitter = RecursiveCharacterTextSplitter(
-        separators=["\n第", "章", "\n第", "條"],  # 依照「第X章」與「第X條」進行分割
-        chunk_size=2000,
-        chunk_overlap=0
+        #separators = [r"\s*第\s*[\u4e00-\u9fa5]+\s*章\s*", r"\s*第\s*\d+(-\d+)?\s*條\s*\n"],
+        separators = [r"第\s+[\u4e00-\u9fa5\d-]+\s+[章條]"],
+        chunk_size=10,
+        chunk_overlap=6,
+        is_separator_regex=True
     )
 
-    # 進行文本分割
-    chunks = text_splitter.split_documents(documents)
+    # 使用 split_text() 分割文本
+    split_texts = text_splitter.split_text(full_text)
+    number = len(split_texts)
+    # 轉換成 Document 物件，確保 metadata 保留
+    chunks = [Document(page_content=chunk, metadata={"source": q2_pdf}) for chunk in split_texts]
+    for i in range(0,len(chunks),1):
+        print("chunks",i,"\n")        
+        print(chunks[i],"\n")
 
     # 回傳 chunks 數量（整數值）
     return len(chunks)
