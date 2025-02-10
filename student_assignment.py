@@ -41,7 +41,7 @@ def hw02_2(q2_pdf):
     # 初始化 RecursiveCharacterTextSplitter，根據章節與條文進行分割
     text_splitter = RecursiveCharacterTextSplitter(
         #separators = [r"\s*第\s*[\u4e00-\u9fa5]+\s*章\s*", r"\s*第\s*\d+(-\d+)?\s*條\s*\n"],
-        separators = [r"第\s+[\u4e00-\u9fa5\d-]+\s+[章條]"],
+        separators = [r"第\s+[\u4e00-\u9fa5\d-]+\s+[章條]\s+"],
         chunk_size=10,
         chunk_overlap=6,
         is_separator_regex=True
